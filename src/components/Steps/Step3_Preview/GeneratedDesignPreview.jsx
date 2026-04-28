@@ -15,18 +15,25 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: "column",
+          gap: 12,
+          alignItems: "flex-start",
           marginBottom: 20,
+          "@media (min-width: 640px)": {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }
         }}
       >
         <div>
           <h2
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: 800,
               color: "#0D47A1",
               marginBottom: 4,
+              "@media (min-width: 640px)": { fontSize: 20 }
             }}
           >
             ✅ Rate Board Generated
@@ -44,6 +51,8 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
             fontWeight: 800,
             fontSize: 13,
             border: "1px solid #A5D6A7",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           ✓ Ready
@@ -52,21 +61,22 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
 
       <div
         style={{
-          borderRadius: 16,
+          borderRadius: 14,
           overflow: "hidden",
           boxShadow: "0 8px 32px rgba(21,101,192,0.18)",
           border: "2px solid #BBDEFB",
-          marginBottom: 20,
+          marginBottom: 16,
+          "@media (min-width: 640px)": { borderRadius: 16, marginBottom: 20 }
         }}
       >
         <img
           src={imageUrl}
           alt="Generated Rate Board"
-          style={{ width: "100%", display: "block" }}
+          style={{ width: "100%", display: "block", maxHeight: "70vh", objectFit: "contain" }}
         />
       </div>
 
-      <div style={{ display: "flex", gap: 12 }}>
+      <div style={{ display: "flex", gap: 8, flexDirection: "column", "@media (min-width: 640px)": { gap: 12, flexDirection: "row" } }}>
         <button
           onClick={handleDownload}
           style={{
@@ -75,11 +85,12 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
             color: "#fff",
             border: "none",
             borderRadius: 12,
-            padding: "14px",
+            padding: "12px 14px",
             fontWeight: 900,
-            fontSize: 15,
+            fontSize: 14,
             cursor: "pointer",
             boxShadow: "0 6px 20px rgba(13,71,161,0.3)",
+            "@media (min-width: 640px)": { padding: "14px", fontSize: 15 }
           }}
         >
           ⬇️ Download PNG
@@ -92,10 +103,11 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
             color: "#1565C0",
             border: "2px solid #1E88E5",
             borderRadius: 12,
-            padding: "14px",
+            padding: "12px 14px",
             fontWeight: 700,
-            fontSize: 15,
+            fontSize: 14,
             cursor: "pointer",
+            "@media (min-width: 640px)": { padding: "14px", fontSize: 15 }
           }}
         >
           🔄 New Rate Board

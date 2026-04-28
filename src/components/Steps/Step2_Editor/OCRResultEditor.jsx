@@ -47,18 +47,25 @@ export function OCRResultEditor({ rates, onGenerate, loading }) {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          gap: 16,
           alignItems: "flex-start",
           marginBottom: 20,
+          "@media (min-width: 640px)": {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }
         }}
       >
         <div>
           <h2
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: 800,
               color: "#0D47A1",
               marginBottom: 4,
+              "@media (min-width: 640px)": { fontSize: 20 }
             }}
           >
             Edit Extracted Rates
@@ -73,6 +80,8 @@ export function OCRResultEditor({ rates, onGenerate, loading }) {
             borderRadius: 10,
             padding: "8px 16px",
             textAlign: "center",
+            minWidth: "140px",
+            flexShrink: 0,
           }}
         >
           <div style={{ fontSize: 10, color: "#1565C0", fontWeight: 600 }}>
@@ -92,9 +101,13 @@ export function OCRResultEditor({ rates, onGenerate, loading }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 10,
+          gridTemplateColumns: "1fr",
+          gap: 16,
           marginBottom: 20,
+          "@media (min-width: 640px)": {
+            gridTemplateColumns: "1fr 1fr",
+            gap: 10,
+          }
         }}
       >
         <div>

@@ -23,9 +23,12 @@ export function InfoCards() {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateColumns: "1fr",
         gap: 16,
         marginTop: 24,
+        "@media (min-width: 640px)": {
+          gridTemplateColumns: "repeat(3, 1fr)",
+        }
       }}
     >
       {cards.map((card) => (
@@ -34,7 +37,7 @@ export function InfoCards() {
           style={{
             background: "#fff",
             borderRadius: 14,
-            padding: "20px 22px",
+            padding: "20px 16px",
             border: "1px solid #E3F2FD",
             boxShadow: "0 2px 10px rgba(21,101,192,0.06)",
           }}

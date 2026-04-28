@@ -18,29 +18,30 @@ function FileBox({ label, hint, file, preview, onChange }) {
       onClick={() => inputRef.current?.click()}
       style={{
         border: '2px dashed #BBDEFB',
-        borderRadius: 14,
+        borderRadius: 12,
         background: '#F8FBFF',
-        padding: 14,
-        minHeight: 145,
+        padding: 12,
+        minHeight: 120,
         cursor: 'pointer',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
+        "@media (min-width: 640px)": { borderRadius: 14, padding: 14, minHeight: 145 }
       }}
     >
       <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp,image/bmp" style={{ display: 'none' }} onChange={(e) => onChange(e.target.files?.[0] || null)} />
       {preview ? (
-        <img src={preview} alt={label} style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain', borderRadius: 8 }} />
+        <img src={preview} alt={label} style={{ maxHeight: 80, maxWidth: '100%', objectFit: 'contain', borderRadius: 8, "@media (min-width: 640px)": { maxHeight: 100 } }} />
       ) : (
         <>
-          <div style={{ fontSize: 28, marginBottom: 8 }}>📷</div>
-          <div style={{ fontWeight: 800, color: '#1565C0' }}>{label}</div>
-          <div style={{ fontSize: 11, color: '#90A4AE', marginTop: 4 }}>{hint}</div>
+          <div style={{ fontSize: 24, marginBottom: 6, "@media (min-width: 640px)": { fontSize: 28, marginBottom: 8 } }}>📷</div>
+          <div style={{ fontWeight: 800, color: '#1565C0', fontSize: 14, "@media (min-width: 640px)": { fontSize: 15 } }}>{label}</div>
+          <div style={{ fontSize: 10, color: '#90A4AE', marginTop: 4, "@media (min-width: 640px)": { fontSize: 11 } }}>{hint}</div>
         </>
       )}
-      {file && <div style={{ fontSize: 11, color: '#607D8B', marginTop: 8 }}>{file.name}</div>}
+      {file && <div style={{ fontSize: 10, color: '#607D8B', marginTop: 6, "@media (min-width: 640px)": { fontSize: 11, marginTop: 8 } }}>{file.name}</div>}
     </div>
   );
 }
@@ -94,10 +95,10 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
 
   return (
     <div>
-      <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0D47A1', marginBottom: 6 }}>Upload Rate Board Image</h2>
-      <p style={{ fontSize: 13, color: '#607D8B', marginBottom: 16 }}>Untuk akurasi terbaik, crop/upload 3 gambar: kolom kiri, kolom tengah, dan kolom kanan.</p>
+      <h2 style={{ fontSize: 18, fontWeight: 800, color: '#0D47A1', marginBottom: 6, "@media (min-width: 640px)": { fontSize: 20 } }}>Upload Rate Board Image</h2>
+      <p style={{ fontSize: 12, color: '#607D8B', marginBottom: 16, "@media (min-width: 640px)": { fontSize: 13 } }}>Untuk akurasi terbaik, crop/upload 3 gambar: kolom kiri, kolom tengah, dan kolom kanan.</p>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexDirection: "column", "@media (min-width: 640px)": { gap: 10, flexDirection: "row" } }}>
         <button
           type="button"
           onClick={() => setMode('blocks')}
@@ -110,6 +111,8 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
             color: '#0D47A1',
             fontWeight: 800,
             cursor: 'pointer',
+            fontSize: 13,
+            "@media (min-width: 640px)": { fontSize: 15 }
           }}
         >
           3 Crop Images
@@ -126,6 +129,8 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
             color: '#0D47A1',
             fontWeight: 800,
             cursor: 'pointer',
+            fontSize: 13,
+            "@media (min-width: 640px)": { fontSize: 15 }
           }}
         >
           1 Full Image

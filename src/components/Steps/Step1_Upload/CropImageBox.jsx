@@ -42,10 +42,10 @@ export default function CropImageBox({ imageSrc, onCropDone, label }) {
   };
 
   return (
-    <div style={{ marginBottom: 24 }}>
-      <h3>{label}</h3>
+    <div style={{ marginBottom: 20, "@media (min-width: 640px)": { marginBottom: 24 } }}>
+      <h3 style={{ fontSize: 16, marginBottom: 12, color: "#0D47A1", "@media (min-width: 640px)": { fontSize: 18 } }}>{label}</h3>
 
-      <div style={{ position: "relative", width: "100%", height: 350, background: "#111" }}>
+      <div style={{ position: "relative", width: "100%", height: 250, background: "#111", borderRadius: 12, overflow: "hidden", "@media (min-width: 640px)": { height: 350 } }}>
         <Cropper
           image={imageSrc}
           crop={crop}
@@ -67,8 +67,23 @@ export default function CropImageBox({ imageSrc, onCropDone, label }) {
         style={{ width: "100%", marginTop: 12 }}
       />
 
-      <button onClick={createCropFile} style={{ marginTop: 12 }}>
-        Save {label}
+      <button 
+        onClick={createCropFile} 
+        style={{ 
+          marginTop: 12, 
+          width: "100%",
+          padding: "10px 16px",
+          background: "linear-gradient(135deg, #0D47A1, #1E88E5)",
+          color: "#fff",
+          border: "none",
+          borderRadius: 8,
+          fontWeight: 700,
+          cursor: "pointer",
+          fontSize: 14,
+          "@media (min-width: 640px)": { fontSize: 15 }
+        }}
+      >
+        ✓ Save {label}
       </button>
     </div>
   );
