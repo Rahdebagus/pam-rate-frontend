@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://claudecaludy-pam-rate-backend.hf.space";
+
+
 
 export const uploadAndExtractRates = async (file) => {
   const formData = new FormData();
