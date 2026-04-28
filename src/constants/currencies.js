@@ -21,12 +21,18 @@ export const CURRENCY_LABELS = {
   THB: "Thai Baht",
   PHP: "Philippine Peso",
   KRW: "Korean Won",
+  INR: "Indian Rupee",
+  NTD: "New Taiwan Dollar",
 };
 
 export const ALL_CURRENCIES = Object.keys(CURRENCY_LABELS);
 
 export const LEFT_COL = ["USD", "AUD", "EUR", "GBP", "CHF", "JPY", "SGD", "CAD", "MYR"];
-export const RIGHT_COL = ["NZD", "HKD", "CNY", "BND", "SAR", "AED", "THB", "PHP", "KRW"];
+
+export const RIGHT_COL = [
+  "NZD", "HKD", "CNY", "BND", "SAR", "AED",
+  "THB", "PHP", "KRW", "INR", "NTD"
+];
 
 export const STEPS = [
   { n: 1, label: "Upload Image" },

@@ -1,8 +1,7 @@
-// ─── Derived Values Box Component ─────────────────────────────────────────────
-
 export function DerivedValuesBox({ usdValue }) {
-  const usdT = usdValue ? usdValue - 400 : "";
-  const usdK = usdValue ? usdValue - 3800 : "";
+  const usd = Number(usdValue || 0);
+  const usdT = usd ? usd - 200 : "";
+  const usdK = usd ? 14000 : "";
 
   return (
     <div
@@ -14,14 +13,7 @@ export function DerivedValuesBox({ usdValue }) {
         border: "1px solid #BBDEFB",
       }}
     >
-      <div
-        style={{
-          fontWeight: 800,
-          color: "#0D47A1",
-          fontSize: 13,
-          marginBottom: 8,
-        }}
-      >
+      <div style={{ fontWeight: 800, color: "#0D47A1", fontSize: 13, marginBottom: 8 }}>
         📐 Auto-Derived Values (from USD)
       </div>
       <div style={{ display: "flex", gap: 16 }}>
@@ -40,11 +32,9 @@ export function DerivedValuesBox({ usdValue }) {
               border: "1px solid #BBDEFB",
             }}
           >
-            <div style={{ fontSize: 12, color: "#607D8B", fontWeight: 600 }}>
-              {label}
-            </div>
+            <div style={{ fontSize: 12, color: "#607D8B", fontWeight: 600 }}>{label}</div>
             <div style={{ fontSize: 18, fontWeight: 900, color: "#1565C0" }}>
-              {val ? val.toLocaleString("id-ID") : "-"}
+              {val ? Number(val).toLocaleString("id-ID") : "-"}
             </div>
           </div>
         ))}

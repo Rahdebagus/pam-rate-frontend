@@ -1,32 +1,92 @@
-// ─── Step 1: Upload Rate Image Component ──────────────────────────────────────
+import { useRef, useState } from 'react';
+import { SUPPORTED_IMAGE_TYPES } from '../../../constants/currencies.js';
+import { uploadAndExtractRates, uploadBlocksAndExtractRates } from '../../../services/api.js';
+import CropImageBox from './CropImageBox.jsx';
 
-import { useState } from "react";
-import { useFileUpload } from "../../../hooks/useFileUpload.js";
-import { uploadAndExtractRates } from "../../../services/api.js";
-import { SUPPORTED_IMAGE_TYPES } from "../../../constants/currencies.js";
+function validateFile(file) {
+  if (!file) return 'File belum dipilih.';
+  if (!SUPPORTED_IMAGE_TYPES.includes(file.type)) return 'Format harus PNG, JPG, WEBP, atau BMP.';
+  if (file.size > 10 * 1024 * 1024) return 'Ukuran maksimal 10MB.';
+  return null;
+}
+
+function FileBox({ label, hint, file, preview, onChange }) {
+  const inputRef = useRef(null);
+
+  return (
+    <div
+      onClick={() => inputRef.current?.click()}
+      style={{
+        border: '2px dashed #BBDEFB',
+        borderRadius: 14,
+        background: '#F8FBFF',
+        padding: 14,
+        minHeight: 145,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+      }}
+    >
+      <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp,image/bmp" style={{ display: 'none' }} onChange={(e) => onChange(e.target.files?.[0] || null)} />
+      {preview ? (
+        <img src={preview} alt={label} style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain', borderRadius: 8 }} />
+      ) : (
+        <>
+          <div style={{ fontSize: 28, marginBottom: 8 }}>📷</div>
+          <div style={{ fontWeight: 800, color: '#1565C0' }}>{label}</div>
+          <div style={{ fontSize: 11, color: '#90A4AE', marginTop: 4 }}>{hint}</div>
+        </>
+      )}
+      {file && <div style={{ fontSize: 11, color: '#607D8B', marginTop: 8 }}>{file.name}</div>}
+    </div>
+  );
+}
 
 export function UploadRateImage({ onResult, loading, setLoading }) {
-  const validateFile = (file) => {
-    if (!file) return false;
-    if (!SUPPORTED_IMAGE_TYPES.includes(file.type)) return false;
-    // Add size validation (max 10MB)
-    if (file.size > 10 * 1024 * 1024) return false;
-    return true;
+  const [mode, setMode] = useState('blocks');
+  const [single, setSingle] = useState(null);
+  const [left, setLeft] = useState(null);
+  const [middle, setMiddle] = useState(null);
+  const [right, setRight] = useState(null);
+  const [error, setError] = useState(null);
+
+  const [fullImage, setFullImage] = useState(null);
+  const [fullImageSrc, setFullImageSrc] = useState(null);
+  const [cropStep, setCropStep] = useState(null);
+
+  const handleFullImageForCrop = (file) => {
+    setFullImage(file);
+    setFullImageSrc(URL.createObjectURL(file));
+    setCropStep('left');
   };
 
-  const upload = useFileUpload(null, validateFile);
+  const preview = (file) => (file ? URL.createObjectURL(file) : null);
 
   const handleSubmit = async () => {
-    if (!upload.file) return;
-    
-    setLoading(true);
-    upload.setError(null);
-    
+    setError(null);
+
     try {
-      const rates = await uploadAndExtractRates(upload.file);
+      setLoading(true);
+      let rates = {};
+
+      if (mode === 'blocks') {
+        for (const f of [left, middle, right]) {
+          const err = validateFile(f);
+          if (err) throw new Error('Upload 3 gambar: kiri, tengah, kanan. ' + err);
+        }
+        rates = await uploadBlocksAndExtractRates({ left, middle, right });
+      } else {
+        const err = validateFile(single);
+        if (err) throw new Error(err);
+        rates = await uploadAndExtractRates(single);
+      }
+
       onResult(rates);
-    } catch (error) {
-      upload.setError(error.message);
+    } catch (err) {
+      setError(err.message || 'Upload failed');
     } finally {
       setLoading(false);
     }
@@ -34,131 +94,125 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
 
   return (
     <div>
-      <h2
-        style={{
-          fontSize: 20,
-          fontWeight: 800,
-          color: "#0D47A1",
-          marginBottom: 6,
-        }}
-      >
-        Upload Rate Board Image
-      </h2>
-      <p style={{ fontSize: 13, color: "#607D8B", marginBottom: 20 }}>
-        Upload a screenshot or photo of a rate board from BI or Authorized Money
-        Changer.
-      </p>
+      <h2 style={{ fontSize: 20, fontWeight: 800, color: '#0D47A1', marginBottom: 6 }}>Upload Rate Board Image</h2>
+      <p style={{ fontSize: 13, color: '#607D8B', marginBottom: 16 }}>Untuk akurasi terbaik, crop/upload 3 gambar: kolom kiri, kolom tengah, dan kolom kanan.</p>
 
-      {/* Drop Zone */}
-      <div
-        onDrop={upload.handleDrop}
-        onDragOver={upload.handleDragOver}
-        onDragLeave={upload.handleDragLeave}
-        onClick={() => upload.inputRef.current?.click()}
-        style={{
-          border: `2px dashed ${upload.dragOver ? "#1E88E5" : "#BBDEFB"}`,
-          borderRadius: 16,
-          background: upload.dragOver ? "#E3F2FD" : "#F8FBFF",
-          padding: "40px 20px",
-          textAlign: "center",
-          cursor: "pointer",
-          transition: "all 0.25s",
-          minHeight: 180,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <input
-          ref={upload.inputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={(e) => upload.handleFile(e.target.files[0])}
-        />
-        {upload.preview ? (
-          <img
-            src={upload.preview}
-            alt="Preview"
-            style={{
-              maxHeight: 220,
-              maxWidth: "100%",
-              borderRadius: 10,
-              boxShadow: "0 4px 20px rgba(21,101,192,0.15)",
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          <>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>📋</div>
-            <div style={{ fontWeight: 700, color: "#1565C0", fontSize: 16 }}>
-              Drop image here or click to browse
-            </div>
-            <div style={{ color: "#90A4AE", fontSize: 12, marginTop: 6 }}>
-              PNG, JPG, WEBP supported (max 10MB)
-            </div>
-          </>
-        )}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+        <button
+          type="button"
+          onClick={() => setMode('blocks')}
+          style={{
+            flex: 1,
+            padding: 10,
+            borderRadius: 10,
+            border: mode === 'blocks' ? '2px solid #1565C0' : '1px solid #CFD8DC',
+            background: mode === 'blocks' ? '#E3F2FD' : '#fff',
+            color: '#0D47A1',
+            fontWeight: 800,
+            cursor: 'pointer',
+          }}
+        >
+          3 Crop Images
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode('single')}
+          style={{
+            flex: 1,
+            padding: 10,
+            borderRadius: 10,
+            border: mode === 'single' ? '2px solid #1565C0' : '1px solid #CFD8DC',
+            background: mode === 'single' ? '#E3F2FD' : '#fff',
+            color: '#0D47A1',
+            fontWeight: 800,
+            cursor: 'pointer',
+          }}
+        >
+          1 Full Image
+        </button>
       </div>
 
-      {upload.error && (
-        <div
-          style={{
-            marginTop: 12,
-            padding: "10px 16px",
-            background: "#FFEBEE",
-            borderRadius: 8,
-            color: "#C62828",
-            fontSize: 13,
-            border: "1px solid #FFCDD2",
-          }}
-        >
-          ⚠️ {upload.error}
+      {mode === 'blocks' ? (
+        <div>
+          {!fullImageSrc && <FileBox label="Upload Full Image" hint="Upload gambar full, lalu crop 3 kolom" file={fullImage} preview={preview(fullImage)} onChange={handleFullImageForCrop} />}
+
+          {fullImageSrc && cropStep === 'left' && (
+            <CropImageBox
+              imageSrc={fullImageSrc}
+              label="Left Column"
+              onCropDone={(file) => {
+                setLeft(file);
+                setCropStep('middle');
+              }}
+            />
+          )}
+
+          {fullImageSrc && cropStep === 'middle' && (
+            <CropImageBox
+              imageSrc={fullImageSrc}
+              label="Middle Column"
+              onCropDone={(file) => {
+                setMiddle(file);
+                setCropStep('right');
+              }}
+            />
+          )}
+
+          {fullImageSrc && cropStep === 'right' && (
+            <CropImageBox
+              imageSrc={fullImageSrc}
+              label="Right Column"
+              onCropDone={(file) => {
+                setRight(file);
+                setCropStep(null);
+              }}
+            />
+          )}
+
+          {left && middle && right && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginTop: 16 }}>
+              <FileBox label="Left Done" hint="USD sampai CAD" file={left} preview={preview(left)} onChange={setLeft} />
+              <FileBox label="Middle Done" hint="MYR sampai THB" file={middle} preview={preview(middle)} onChange={setMiddle} />
+              <FileBox label="Right Done" hint="PHP sampai NTD" file={right} preview={preview(right)} onChange={setRight} />
+            </div>
+          )}
         </div>
+      ) : (
+        <FileBox label="Full Rate Board" hint="Upload gambar penuh" file={single} preview={preview(single)} onChange={setSingle} />
       )}
 
-      {/* Action Row */}
-      <div style={{ marginTop: 20, display: "flex", gap: 12, alignItems: "center" }}>
+      {error && <div style={{ marginTop: 12, padding: '10px 16px', background: '#FFEBEE', borderRadius: 8, color: '#C62828', fontSize: 13, border: '1px solid #FFCDD2' }}>⚠️ {error}</div>}
+
+      <div style={{ marginTop: 20, display: 'flex', gap: 12, alignItems: 'center' }}>
         <button
           onClick={handleSubmit}
-          disabled={!upload.file || loading}
+          disabled={loading}
           style={{
-            background:
-              upload.file && !loading
-                ? "linear-gradient(135deg, #1565C0, #1E88E5)"
-                : "#CFD8DC",
-            color: "#fff",
-            border: "none",
+            background: loading ? '#CFD8DC' : 'linear-gradient(135deg, #1565C0, #1E88E5)',
+            color: '#fff',
+            border: 'none',
             borderRadius: 10,
-            padding: "12px 28px",
+            padding: '12px 28px',
             fontWeight: 800,
             fontSize: 15,
-            cursor: upload.file && !loading ? "pointer" : "not-allowed",
-            boxShadow:
-              upload.file && !loading ? "0 4px 15px rgba(21,101,192,0.3)" : "none",
-            transition: "all 0.25s",
+            cursor: loading ? 'not-allowed' : 'pointer',
+            boxShadow: loading ? 'none' : '0 4px 15px rgba(21,101,192,0.3)',
           }}
         >
-          {loading ? "🔍 Scanning..." : "🔍 Extract Rates"}
+          {loading ? '🔍 Scanning...' : '🔍 Extract Rates'}
         </button>
-        {upload.preview && (
-          <button
-            onClick={() => upload.clear()}
-            style={{
-              background: "none",
-              border: "1px solid #CFD8DC",
-              borderRadius: 10,
-              padding: "12px 20px",
-              color: "#607D8B",
-              cursor: "pointer",
-              fontWeight: 600,
-              fontSize: 14,
-            }}
-          >
-            Clear
-          </button>
-        )}
+        <button
+          onClick={() => {
+            setSingle(null);
+            setLeft(null);
+            setMiddle(null);
+            setRight(null);
+            setError(null);
+          }}
+          style={{ background: 'none', border: '1px solid #CFD8DC', borderRadius: 10, padding: '12px 20px', color: '#607D8B', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+        >
+          Clear
+        </button>
       </div>
     </div>
   );
