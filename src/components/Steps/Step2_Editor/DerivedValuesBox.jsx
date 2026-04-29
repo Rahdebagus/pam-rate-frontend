@@ -57,13 +57,15 @@ export function DerivedValuesBox({ usdValue, onUsdTChange, onUsdKChange, usdTVal
                 textAlign: "center",
                 border: "1px solid #BBDEFB",
                 borderRadius: 6,
-                padding: "6px 8px",
-                fontSize: 14,
+                padding: "8px 6px",
+                fontSize: 13,
                 fontWeight: 900,
                 color: "#1565C0",
                 background: "#F0F7FF",
                 outline: "none",
-                "@media (min-width: 640px)": { fontSize: 16 }
+                boxSizing: "border-box",
+                minHeight: "40px",
+                cursor: "text"
               }}
             />
           </div>

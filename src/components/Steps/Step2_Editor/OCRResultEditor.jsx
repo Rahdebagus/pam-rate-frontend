@@ -21,6 +21,8 @@ export function OCRResultEditor({ rates, onGenerate, loading }) {
     setValues((prev) => ({ ...prev, [code]: val }));
   };
 
+
+
   const handleGenerate = () => {
     const payload = {};
     let hasAny = false;
@@ -172,15 +174,12 @@ export function OCRResultEditor({ rates, onGenerate, loading }) {
       <button
         onClick={handleGenerate}
         disabled={loading}
+        className="responsive-button"
         style={{
-          width: '100%',
           background: loading ? '#CFD8DC' : 'linear-gradient(135deg, #0D47A1, #1E88E5)',
           color: '#fff',
           border: 'none',
-          borderRadius: 12,
-          padding: '14px',
           fontWeight: 900,
-          fontSize: 16,
           cursor: loading ? 'not-allowed' : 'pointer',
           boxShadow: loading ? 'none' : '0 6px 20px rgba(13,71,161,0.3)',
           letterSpacing: 0.5,

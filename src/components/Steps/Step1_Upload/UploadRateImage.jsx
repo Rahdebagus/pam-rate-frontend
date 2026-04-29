@@ -188,7 +188,7 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
 
       {error && <div style={{ marginTop: 12, padding: '10px 16px', background: '#FFEBEE', borderRadius: 8, color: '#C62828', fontSize: 13, border: '1px solid #FFCDD2' }}>⚠️ {error}</div>}
 
-      <div style={{ marginTop: 20, display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div className="button-group">
         <button
           onClick={handleSubmit}
           disabled={loading}
@@ -196,10 +196,7 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
             background: loading ? '#CFD8DC' : 'linear-gradient(135deg, #1565C0, #1E88E5)',
             color: '#fff',
             border: 'none',
-            borderRadius: 10,
-            padding: '12px 28px',
             fontWeight: 800,
-            fontSize: 15,
             cursor: loading ? 'not-allowed' : 'pointer',
             boxShadow: loading ? 'none' : '0 4px 15px rgba(21,101,192,0.3)',
           }}
@@ -214,7 +211,13 @@ export function UploadRateImage({ onResult, loading, setLoading }) {
             setRight(null);
             setError(null);
           }}
-          style={{ background: 'none', border: '1px solid #CFD8DC', borderRadius: 10, padding: '12px 20px', color: '#607D8B', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+          style={{ 
+            background: '#fff', 
+            border: '1px solid #CFD8DC', 
+            color: '#607D8B', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+          }}
         >
           Clear
         </button>

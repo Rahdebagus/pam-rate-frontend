@@ -76,21 +76,16 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
         />
       </div>
 
-      <div style={{ display: "flex", gap: 8, flexDirection: "column", "@media (min-width: 640px)": { gap: 12, flexDirection: "row" } }}>
+      <div className="button-group" style={{ flexDirection: "row" }}>
         <button
           onClick={handleDownload}
           style={{
-            flex: 1,
             background: "linear-gradient(135deg, #0D47A1, #1E88E5)",
             color: "#fff",
             border: "none",
-            borderRadius: 12,
-            padding: "12px 14px",
             fontWeight: 900,
-            fontSize: 14,
             cursor: "pointer",
             boxShadow: "0 6px 20px rgba(13,71,161,0.3)",
-            "@media (min-width: 640px)": { padding: "14px", fontSize: 15 }
           }}
         >
           ⬇️ Download PNG
@@ -98,16 +93,11 @@ export function GeneratedDesignPreview({ imageUrl, onReset }) {
         <button
           onClick={onReset}
           style={{
-            flex: 1,
             background: "#fff",
             color: "#1565C0",
             border: "2px solid #1E88E5",
-            borderRadius: 12,
-            padding: "12px 14px",
             fontWeight: 700,
-            fontSize: 14,
             cursor: "pointer",
-            "@media (min-width: 640px)": { padding: "14px", fontSize: 15 }
           }}
         >
           🔄 New Rate Board
