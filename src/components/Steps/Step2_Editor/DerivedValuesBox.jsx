@@ -1,7 +1,19 @@
-export function DerivedValuesBox({ usdValue }) {
+import { useEffect } from "react";
+
+export function DerivedValuesBox({ usdValue, onUsdTChange, onUsdKChange, usdTValue, usdKValue }) {
   const usd = Number(usdValue || 0);
-  const usdT = usd ? usd - 200 : "";
-  const usdK = usd ? 14000 : "";
+  const defaultUsdT = usd ? usd - 200 : "";
+  const defaultUsdK = usd ? 14000 : "";
+
+  // Update to default values when USD changes
+  useEffect(() => {
+    if (usd > 0 && !usdTValue) {
+      onUsdTChange("USDT", defaultUsdT);
+    }
+    if (usd > 0 && !usdKValue) {
+      onUsdKChange("USDK", defaultUsdK);
+    }
+  }, [usd, defaultUsdT, defaultUsdK, usdTValue, usdKValue, onUsdTChange, onUsdKChange]);
 
   return (
     <div
@@ -15,13 +27,13 @@ export function DerivedValuesBox({ usdValue }) {
       }}
     >
       <div style={{ fontWeight: 800, color: "#0D47A1", fontSize: 12, marginBottom: 8, "@media (min-width: 640px)": { fontSize: 13 } }}>
-        📐 Auto-Derived Values (from USD)
+        📐 Auto-Derived Values (from USD) - Editable
       </div>
       <div style={{ display: "flex", gap: 12, "@media (min-width: 640px)": { gap: 16 } }}>
         {[
-          ["USD T", usdT],
-          ["USD K", usdK],
-        ].map(([label, val]) => (
+          ["USDT", usdTValue || defaultUsdT, onUsdTChange],
+          ["USDK", usdKValue || defaultUsdK, onUsdKChange],
+        ].map(([label, val, onChange]) => (
           <div
             key={label}
             style={{
@@ -35,9 +47,25 @@ export function DerivedValuesBox({ usdValue }) {
             }}
           >
             <div style={{ fontSize: 11, color: "#607D8B", fontWeight: 600, "@media (min-width: 640px)": { fontSize: 12 } }}>{label}</div>
-            <div style={{ fontSize: 16, fontWeight: 900, color: "#1565C0", "@media (min-width: 640px)": { fontSize: 18 } }}>
-              {val ? Number(val).toLocaleString("id-ID") : "-"}
-            </div>
+            <input
+              type="number"
+              value={val}
+              onChange={(e) => onChange(label, e.target.value ? Number(e.target.value) : "")}
+              placeholder="0"
+              style={{
+                width: "100%",
+                textAlign: "center",
+                border: "1px solid #BBDEFB",
+                borderRadius: 6,
+                padding: "6px 8px",
+                fontSize: 14,
+                fontWeight: 900,
+                color: "#1565C0",
+                background: "#F0F7FF",
+                outline: "none",
+                "@media (min-width: 640px)": { fontSize: 16 }
+              }}
+            />
           </div>
         ))}
       </div>

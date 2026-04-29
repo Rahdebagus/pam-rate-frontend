@@ -4,6 +4,8 @@ export const API_BASE = "https://claudecaludy-pam-rate-backend.hf.space";
 
 export const CURRENCY_LABELS = {
   USD: "US Dollar",
+  USDT: "US Dollar Tether",
+  USDK: "US Dollar Thousand",
   AUD: "Australian Dollar",
   EUR: "Euro",
   GBP: "British Pound",
