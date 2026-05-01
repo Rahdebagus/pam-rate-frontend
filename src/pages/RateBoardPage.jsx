@@ -47,21 +47,20 @@ export default function RateBoardPage() {
       <Header currentStep={step} />
 
       {/* ── Main Content ─────────────────────────────────────────────────── */}
-      <main style={{ maxWidth: 960, margin: "20px auto", padding: "0 12px", "@media (min-width: 640px)": { margin: "40px auto", padding: "0 24px" } }}>
+      <main style={{ maxWidth: 960, margin: "40px auto", padding: "0 24px" }}>
         {/* Page Title */}
-        <div style={{ marginBottom: 24, textAlign: "center", "@media (min-width: 640px)": { marginBottom: 32 } }}>
+        <div style={{ marginBottom: 32, textAlign: "center" }}>
           <h1
             style={{
-              fontSize: 22,
+              fontSize: 28,
               fontWeight: 900,
               color: "#0D47A1",
               marginBottom: 8,
-              "@media (min-width: 640px)": { fontSize: 28 },
             }}
           >
             Rate Board Generator
           </h1>
-          <p style={{ color: "#607D8B", fontSize: 13, "@media (min-width: 640px)": { fontSize: 15 } }}>
+          <p style={{ color: "#607D8B", fontSize: 15 }}>
             Upload any rate board image → OCR extracts rates → Edit → Generate
             branded PAM design
           </p>
@@ -71,11 +70,10 @@ export default function RateBoardPage() {
         <div
           style={{
             background: "#fff",
-            borderRadius: 16,
-            padding: "20px 16px",
+            borderRadius: 20,
+            padding: "36px 40px",
             boxShadow: "0 4px 24px rgba(21,101,192,0.10)",
             border: "1px solid #E3F2FD",
-            "@media (min-width: 640px)": { borderRadius: 20, padding: "36px 40px" }
           }}
         >
           {step === 1 && (
